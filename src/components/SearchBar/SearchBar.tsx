@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../redux/store';
-import { getUserRepos, searchUsers } from '../../api/githubApi';
+import { getUserRepos, searchUsers, getUserDetails } from '../../api/githubApi';
 import UserList from '../UserList/UserList';
 import { User } from '../../types/user';
 
@@ -12,6 +12,7 @@ const SearchBar: React.FC = () => {
   const [searchedUser, setSearchedUser] = useState('');
   const [expandedUsers, setExpandedUsers] = useState<{ [key: number]: boolean }>({});
   const [selectedUserRepos, setSelectedUserRepos] = useState<{ [key: number]: any[] }>({});
+  const [totalReposCount, setTotalReposCount] = useState<{ [key: number]: number }>({});
 
   const handleSearch = async () => {
     const result = await searchUsers(username);
@@ -29,6 +30,9 @@ const SearchBar: React.FC = () => {
     setExpandedUsers(prev => ({ ...prev, [user.id]: !prev[user.id] }));
 
     if (!selectedUserRepos[user.id]) {
+      const userDetails = await getUserDetails(user.login);
+      setTotalReposCount(prev => ({ ...prev, [user.id]: userDetails.public_repos }));
+
       const { repos } = await getUserRepos(user.login);
       setSelectedUserRepos(prev => ({ ...prev, [user.id]: repos }));
     }
@@ -50,6 +54,7 @@ const SearchBar: React.FC = () => {
         onUserClick={handleUserClick} 
         expandedUsers={expandedUsers} 
         selectedUserRepos={selectedUserRepos}
+        totalReposCount={totalReposCount}
       />
     </div>
   );
