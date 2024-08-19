@@ -1,5 +1,6 @@
 import React from 'react';
 import { Repository } from '../../types/repository';
+import './RepositoryList.scss';
 
 interface RepositoryListProps {
   repos: Repository[];

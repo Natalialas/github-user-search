@@ -1,0 +1,85 @@
+@import '../../styles/settings.scss';
+
+.repository-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.repository-item {
+    background-color: $color-dark-gray;
+    padding: 20px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    min-height: 100px;
+}
+
+.repository-item > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+p {
+    font-size: 14px;
+    color: $color-dark;
+    margin: 5px 0;
+    word-wrap: break-word;
+    flex-grow: 1;
+    max-width: 90%;
+}
+
+h4 {
+    font-size: 18px;
+    margin: 0 0 5px 0;
+    text-align: left;
+    font-weight: $font-bold;
+    word-wrap: break-word;
+    min-height: 22px;
+}
+
+.repo-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    font-size: 18px;
+    color: $color-dark;
+    font-weight: $font-bold;
+    min-width: 80px;
+    text-align: right;
+}
+
+.repo-stars {
+    font-size: 16px;
+    color: $color-dark;
+    font-weight: $font-bold;
+    margin-top: 5px;
+}
+
+.show-more-button {
+    background-color: $color-dark-gray;
+    color: $color-dark;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin: 20px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+}
+
+.show-more-button:hover {
+    background-color: darken($color-dark-gray, 10%);
+}
