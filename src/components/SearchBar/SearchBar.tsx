@@ -4,6 +4,7 @@ import { AppState } from '../../redux/store';
 import { getUserRepos, searchUsers, getUserDetails } from '../../api/githubApi';
 import UserList from '../UserList/UserList';
 import { User } from '../../types/user';
+import './SearchBar.scss';
 
 const SearchBar: React.FC = () => {
   const dispatch = useDispatch();
