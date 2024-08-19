@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'; 
 import { User } from '../../types/user';
 import RepositoryList from '../RepositoryList/RepositoryList';
+import './UserList.scss';
 
 interface UserListProps {
   users: User[];
