@@ -25,22 +25,33 @@ const SearchBar: React.FC = () => {
 
   const resetState = () => {
     setSelectedUserRepos({});
+    setTotalReposCount({});
     setExpandedUsers({});
+    setVisibleRepos({});
+    setLoadingRepos({});
   };
 
   const handleUserClick = async (user: User) => {
-    setExpandedUsers(prev => ({ ...prev, [user.id]: !prev[user.id] }));
-  
+    toggleUserExpansion(user.id);
+
     if (!selectedUserRepos[user.id]) {
       setLoadingRepos(prev => ({ ...prev, [user.id]: true }));
-  
+
       const userDetails = await getUserDetails(user.login);
-      setTotalReposCount(prev => ({ ...prev, [user.id]: userDetails.public_repos }));
-  
       const { repos } = await getUserRepos(user.login);
-      setSelectedUserRepos(prev => ({ ...prev, [user.id]: repos }));
+
+      if (repos.length > 0) {
+        setSelectedUserRepos(prev => ({ ...prev, [user.id]: repos }));
+        setTotalReposCount(prev => ({ ...prev, [user.id]: userDetails.public_repos }));
+        setVisibleRepos(prev => ({ ...prev, [user.id]: Math.min(repos.length, 5) }));
+      }
+
       setLoadingRepos(prev => ({ ...prev, [user.id]: false }));
     }
+  };
+
+  const toggleUserExpansion = (userId: number) => {
+    setExpandedUsers(prev => ({ ...prev, [userId]: !prev[userId] }));
   };
 
   const loadMoreRepos = async (userId: number) => {
@@ -59,28 +70,41 @@ const SearchBar: React.FC = () => {
     }
   };
 
+  const isAnyUserExpanded = Object.values(expandedUsers).some(Boolean);
+
   return (
     <div className="searchbar-wrapper">
-      <input 
-        type="text" 
-        placeholder="Enter username" 
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="searchbar-input"
-      />
-      <button onClick={handleSearch} className="searchbar-button">Search</button>
+      <div className="searchbar-container">
+        <h1 className="searchbar-title">GitHub User and Repository Search</h1>
+        <input 
+          type="text" 
+          placeholder="Enter username" 
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="searchbar-input"
+        />
+        <button onClick={handleSearch} className="searchbar-button">Search</button>
 
-      <UserList 
-        users={users} 
-        onUserClick={handleUserClick} 
-        expandedUsers={expandedUsers} 
-        selectedUserRepos={selectedUserRepos}
-        totalReposCount={totalReposCount}
-        loadMoreRepos={loadMoreRepos}
-        visibleRepos={visibleRepos}
-      />
+        {!isAnyUserExpanded && users.length > 0 && (
+          <div className="current-search-info">
+            <p>Showing users for "{searchedUser}"</p>
+          </div>
+        )}
+
+        <UserList 
+          users={users} 
+          onUserClick={handleUserClick} 
+          selectedUserRepos={selectedUserRepos} 
+          expandedUsers={expandedUsers}
+          loadMoreRepos={loadMoreRepos}
+          visibleRepos={visibleRepos}
+          totalReposCount={totalReposCount}
+          loadingRepos={loadingRepos}
+        />
+      </div>
     </div>
   );
 };
 
 export default SearchBar;
+
