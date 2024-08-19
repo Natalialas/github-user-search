@@ -1,9 +1,10 @@
 import React from 'react';
+import SearchBar from './components/SearchBar/SearchBar';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <div className="App">
-      Hello world
+      <SearchBar />
     </div>
   );
 }
