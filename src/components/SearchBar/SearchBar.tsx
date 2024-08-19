@@ -13,6 +13,7 @@ const SearchBar: React.FC = () => {
   const [expandedUsers, setExpandedUsers] = useState<{ [key: number]: boolean }>({});
   const [selectedUserRepos, setSelectedUserRepos] = useState<{ [key: number]: any[] }>({});
   const [totalReposCount, setTotalReposCount] = useState<{ [key: number]: number }>({});
+  const [visibleRepos, setVisibleRepos] = useState<{ [key: number]: number }>({});
 
   const handleSearch = async () => {
     const result = await searchUsers(username);
@@ -38,6 +39,22 @@ const SearchBar: React.FC = () => {
     }
   };
 
+  const loadMoreRepos = async (userId: number) => {
+    const currentPage = Math.ceil((visibleRepos[userId] || 5) / 5);
+    const { repos } = await getUserRepos(users.find(u => u.id === userId)?.login || '', currentPage + 1);
+
+    if (repos.length > 0) {
+      setSelectedUserRepos(prev => ({
+        ...prev,
+        [userId]: [...prev[userId], ...repos],
+      }));
+      setVisibleRepos(prev => ({
+        ...prev,
+        [userId]: prev[userId] + repos.length,
+      }));
+    }
+  };
+
   return (
     <div className="searchbar-wrapper">
       <input 
@@ -55,6 +72,8 @@ const SearchBar: React.FC = () => {
         expandedUsers={expandedUsers} 
         selectedUserRepos={selectedUserRepos}
         totalReposCount={totalReposCount}
+        loadMoreRepos={loadMoreRepos}
+        visibleRepos={visibleRepos}
       />
     </div>
   );

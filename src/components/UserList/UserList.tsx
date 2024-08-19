@@ -9,6 +9,8 @@ interface UserListProps {
   onUserClick: (user: User) => void;
   expandedUsers: { [key: number]: boolean };
   selectedUserRepos: { [key: number]: any[] };
+  loadMoreRepos: (userId: number) => void;
+  visibleRepos: { [key: number]: number };
   totalReposCount: { [key: number]: number };
 }
 
@@ -17,6 +19,8 @@ const UserList: React.FC<UserListProps> = ({
   onUserClick,
   expandedUsers,
   selectedUserRepos,
+  loadMoreRepos,
+  visibleRepos,
   totalReposCount,
 }) => {
   return (
@@ -24,6 +28,7 @@ const UserList: React.FC<UserListProps> = ({
       {users.map((user) => {
         const isExpanded = expandedUsers[user.id];
         const userRepos = selectedUserRepos[user.id] || [];
+        const visibleCount = visibleRepos[user.id] || 5;
         const totalCount = totalReposCount[user.id] || 0;
 
         return (
@@ -40,7 +45,12 @@ const UserList: React.FC<UserListProps> = ({
 
             {isExpanded && (
               <div className="user-repos">
-                <RepositoryList repos={userRepos} />
+                <RepositoryList repos={userRepos.slice(0, visibleCount)} />
+                {visibleCount < totalCount && (
+                  <button className="show-more-button" onClick={() => loadMoreRepos(user.id)}>
+                    Show more
+                  </button>
+                )}
               </div>
             )}
           </React.Fragment>
