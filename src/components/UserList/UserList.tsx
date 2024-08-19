@@ -12,6 +12,7 @@ interface UserListProps {
   loadMoreRepos: (userId: number) => void;
   visibleRepos: { [key: number]: number };
   totalReposCount: { [key: number]: number };
+  loadingRepos: { [key: number]: boolean };
 }
 
 const UserList: React.FC<UserListProps> = ({
@@ -22,6 +23,7 @@ const UserList: React.FC<UserListProps> = ({
   loadMoreRepos,
   visibleRepos,
   totalReposCount,
+  loadingRepos,
 }) => {
   return (
     <div className="user-list">
@@ -36,7 +38,6 @@ const UserList: React.FC<UserListProps> = ({
             <div className="user-item" onClick={() => onUserClick(user)}>
               <div className="user-header">
                 <h3>{user.login}</h3>
-                <span className="repo-count">Repos: {totalCount}</span>
                 <span className="dropdown-icon">
                   <FontAwesomeIcon icon={isExpanded ? faChevronUp : faChevronDown} />
                 </span>
@@ -45,11 +46,19 @@ const UserList: React.FC<UserListProps> = ({
 
             {isExpanded && (
               <div className="user-repos">
-                <RepositoryList repos={userRepos.slice(0, visibleCount)} />
-                {visibleCount < totalCount && (
-                  <button className="show-more-button" onClick={() => loadMoreRepos(user.id)}>
-                    Show more
-                  </button>
+                {loadingRepos[user.id] ? (
+                  <p>Loading repositories...</p>
+                ) : userRepos.length === 0 ? (
+                  <p>No repositories available for this user.</p>
+                ) : (
+                  <>
+                    <RepositoryList repos={userRepos.slice(0, visibleCount)} />
+                    {visibleCount < totalCount && (
+                      <button className="show-more-button" onClick={() => loadMoreRepos(user.id)}>
+                        Show more
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             )}

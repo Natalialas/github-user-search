@@ -14,6 +14,7 @@ const SearchBar: React.FC = () => {
   const [selectedUserRepos, setSelectedUserRepos] = useState<{ [key: number]: any[] }>({});
   const [totalReposCount, setTotalReposCount] = useState<{ [key: number]: number }>({});
   const [visibleRepos, setVisibleRepos] = useState<{ [key: number]: number }>({});
+  const [loadingRepos, setLoadingRepos] = useState<{ [key: number]: boolean }>({});
 
   const handleSearch = async () => {
     const result = await searchUsers(username);
@@ -29,13 +30,16 @@ const SearchBar: React.FC = () => {
 
   const handleUserClick = async (user: User) => {
     setExpandedUsers(prev => ({ ...prev, [user.id]: !prev[user.id] }));
-
+  
     if (!selectedUserRepos[user.id]) {
+      setLoadingRepos(prev => ({ ...prev, [user.id]: true }));
+  
       const userDetails = await getUserDetails(user.login);
       setTotalReposCount(prev => ({ ...prev, [user.id]: userDetails.public_repos }));
-
+  
       const { repos } = await getUserRepos(user.login);
       setSelectedUserRepos(prev => ({ ...prev, [user.id]: repos }));
+      setLoadingRepos(prev => ({ ...prev, [user.id]: false }));
     }
   };
 
