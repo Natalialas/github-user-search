@@ -1,46 +1,114 @@
-# Getting Started with Create React App
+# GitHub User and Repository Search
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application to search for GitHub users and view their repositories. This project uses the GitHub API to fetch user details, repositories, and repository statistics like the number of stars.
+
+## Features
+
+- Search for GitHub users by username.
+- View details of each user, including their public repositories.
+- Pagination support for repositories (load more repositories on demand).
+- Clean and responsive UI built with SCSS.
+- State management using Redux.
+
+## Demo
+
+(link here)
+
+## Technologies Used
+
+- **React**: Frontend framework for building user interfaces.
+- **Redux**: State management for handling the application state.
+- **TypeScript**: For static typing and better developer experience.
+- **Octokit**: GitHub's official JavaScript library for interacting with the GitHub API.
+- **SCSS**: CSS preprocessor for styling.
+- **FontAwesome**: For icons.
+- **Webpack & React Scripts**: Build and bundling tools.
+
+## Installation and Setup
+
+To run the application locally, follow the steps below:
+
+### 1. Clone the repository:
+
+```bash
+git clone https://github.com/Natalialas/github-user-search.git
+cd github-user-search
+```
+
+### 2. Install the dependencies:
+
+```bash
+npm install
+```
+
+### 3. Set up the GitHub API token:
+Create a .env file in the root of the project with the following content:
+
+```bash
+REACT_APP_GITHUB_TOKEN=your_github_token
+```
+
+Make sure you replace your_github_token with a valid GitHub personal access token. You can create a token by visiting GitHub Developer Settings.
+
+### 4. Start the development server:
+
+```bash
+npm start
+```
+This will start the application at http://localhost:3000.
+
+## Usage
+1. Open the application in your browser.
+2. Enter a GitHub username in the search bar and click "Search".
+3. The application will display matching users. Click on a user to view their repositories.
+4. You can load more repositories by clicking the "Show more" button if the user has more than 5 repositories.
+
+## Project Structure
+
+- **`src/api/githubApi.ts`**: Contains functions that make API requests to GitHub using Octokit.
+- **`src/components/`**: Contains React components such as `SearchBar`, `UserList`, and `RepositoryList`.
+- **`src/redux/`**: Contains Redux-related code, including reducers and store configuration.
+- **`src/styles/`**: SCSS stylesheets for the application.
+
+## Example Code
+
+Here is a brief example of how we use the GitHub API to search for users:
+
+```typescript
+import { Octokit } from "octokit";
+
+const octokit = new Octokit({
+  auth: process.env.REACT_APP_GITHUB_TOKEN,
+});
+
+export const searchUsers = async (username: string) => {
+  try {
+    const { data } = await octokit.request('GET /search/users', {
+      q: username,
+      per_page: 5,
+    });
+    return data.items;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return [];
+  }
+};
+```
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+- **`npm start`**: Runs the app in development mode.
+- **`npm test`**: Launches the test runner in interactive watch mode.
+- **`npm run build`**: Builds the app for production to the `build` folder.
+- **`npm run eject`**: Ejects the app from `react-scripts` for advanced customization.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Future Improvements
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Add tests for components and API calls.
+- Improve UI responsiveness and accessibility.
 
-### `npm test`
+## License
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
