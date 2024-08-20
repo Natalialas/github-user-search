@@ -6,14 +6,22 @@
   align-items: center;
   min-height: 100vh;
   background-color: $color-light-gray;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 }
 
 .searchbar-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   padding: 20px;
   background-color: $color-light;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
 }
 
 .searchbar-title {
@@ -21,6 +29,10 @@
   font-size: 24px;
   font-weight: $font-bold;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 }
 
 .searchbar-input {
@@ -29,6 +41,10 @@
   margin-bottom: 20px;
   border: 1px solid #ddd;
   background-color: $color-light-gray;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 }
 
 .searchbar-button {
@@ -40,6 +56,11 @@
   cursor: pointer;
   font-size: 16px;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 14px;
+  }
 }
 
 .searchbar-button:hover {
