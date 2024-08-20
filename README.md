@@ -12,7 +12,7 @@ A React application to search for GitHub users and view their repositories. This
 
 ## Demo
 
-(link here)
+[(link here)](https://github-user-search-lilac-alpha.vercel.app/)
 
 ## Technologies Used
 
