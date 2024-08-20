@@ -16,14 +16,22 @@ const SearchBar: React.FC = () => {
   const [totalReposCount, setTotalReposCount] = useState<{ [key: number]: number }>({});
   const [visibleRepos, setVisibleRepos] = useState<{ [key: number]: number }>({});
   const [loadingRepos, setLoadingRepos] = useState<{ [key: number]: boolean }>({});
+  const [noResults, setNoResults] = useState(false);
 
   const handleSearch = async () => {
     const result = await searchUsers(username);
     dispatch({ type: 'SET_USERS', payload: result });
+    
+    if (result.length === 0) {
+      setNoResults(true);
+    } else {
+      setNoResults(false);
+    }
+    
     setSearchedUser(username);
     resetState();
   };
-
+  
   const resetState = () => {
     setSelectedUserRepos({});
     setTotalReposCount({});
@@ -85,6 +93,10 @@ const SearchBar: React.FC = () => {
           className="searchbar-input"
         />
         <button onClick={handleSearch} className="searchbar-button">Search</button>
+
+        {noResults && (
+          <p className="no-results-message">No matching users found.</p>
+        )}
 
         {!isAnyUserExpanded && users.length > 0 && (
           <div className="current-search-info">
